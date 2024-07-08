@@ -11,20 +11,58 @@ function App() {
   const [allIncluded, setAllIncluded] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [placeholder, setPlaceholder] = useState('Max Length: 64');
+  const [charArr, setCharArr] = useState([]);
+
 
   const generatePassword = () => {
+    //create a variable to store the password
+    let generatedPassword = '';
 
+    let selectedValsArr = [uppercase, lowercase, numbers, specialChars];
+
+    //create for loop to iterate through the selectedValsArr array
+    for (let i = 0; i < selectedValsArr.length; i++) {
+      if (selectedValsArr[i] === true) {
+        let switchVal = selectedValsArr[i];
+        switch (switchVal) {
+          case uppercase:
+            break;
+          case lowercase:
+            break;
+          case numbers:
+            break;
+          case specialChars:
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  const findAndRemove = (option) => {
+    setCharArr(charArr.filter((char) => char !== option));
+  }
+
+  const clearOptions = () => {
+    setUppercase(false);
+    setLowercase(false);
+    setNumbers(false);
+    setSpecialChars(false);
+    setAllIncluded(false);
+    setCharArr([]);
   }
 
   useEffect(()=> {
-    setAllIncluded(allIncluded)
-    setLength(length)
-    setLowercase(lowercase)
-    setUppercase(uppercase)
-    setNumbers(numbers)
-    setSpecialChars(specialChars)
+    let aciiVal = 54;
+    let char = String.fromCharCode(aciiVal);
+    console.log("This is a character: " + char);
 
-  }, [uppercase, lowercase, numbers, specialChars, allIncluded, length])
+    let aciiVal2 = 'A';
+    let char2 = aciiVal2.charCodeAt(0);
+    console.log("This is a acii number: " + char2);
+
+  }, [])
 
   return (
     <div className="App">
@@ -64,6 +102,7 @@ function App() {
               setLowercase(e.target.checked)
               setNumbers(e.target.checked)
               setSpecialChars(e.target.checked)
+              setCharArr(['uppercase', 'lowercase', 'numbers', 'specialChars'])
 
             }}
           />
@@ -77,12 +116,18 @@ function App() {
               if (allIncluded) {
                 setAllIncluded(false)
                 setUppercase(e.target.checked)
+                findAndRemove ('uppercase')
               } else if (!uppercase && lowercase && numbers && specialChars && !allIncluded)
                 {
                 setAllIncluded(true)
                 setUppercase(e.target.checked)
-              } else {
+                charArr.push('uppercase')
+              } else if (uppercase){
                 setUppercase(e.target.checked)
+                findAndRemove ('uppercase')
+              } else if (!uppercase) {
+                setUppercase(e.target.checked)
+                charArr.push('uppercase')
               }
             }}
           />
@@ -96,12 +141,18 @@ function App() {
               if (allIncluded) {
                 setAllIncluded(false)
                 setLowercase(e.target.checked)
+                findAndRemove ('lowercase')
               } else if (uppercase && !lowercase && numbers && specialChars && !allIncluded)
                 {
                 setAllIncluded(true)
                 setLowercase(e.target.checked)
-              } else {
+                charArr.push('lowercase')
+              } else if (lowercase){
                 setLowercase(e.target.checked)
+                findAndRemove ('lowercase')
+              } else if (!lowercase) {
+                setLowercase(e.target.checked)
+                charArr.push('lowercase')
               }
             }}
           />
@@ -115,12 +166,18 @@ function App() {
               if (allIncluded) {
                 setAllIncluded(false)
                 setNumbers(e.target.checked)
+                findAndRemove ('numbers')
               } else if (uppercase && lowercase && !numbers && specialChars && !allIncluded)
                 {
                 setAllIncluded(true)
                 setNumbers(e.target.checked)
-              } else {
+                charArr.push('numbers')
+              } else if (numbers){
                 setNumbers(e.target.checked)
+                findAndRemove ('numbers')
+              } else if (!numbers) {
+                setNumbers(e.target.checked)
+                charArr.push('numbers')
               }
             }}
           />
@@ -134,17 +191,25 @@ function App() {
               if (allIncluded) {
                 setAllIncluded(false)
                 setSpecialChars(e.target.checked)
+                findAndRemove ('specialChars')
               } else if (uppercase && lowercase && numbers && !specialChars && !allIncluded)
                 {
                 setAllIncluded(true)
                 setSpecialChars(e.target.checked)
-              } else {
+                charArr.push('specialChars')
+              } else if (specialChars){
                 setSpecialChars(e.target.checked)
+                findAndRemove ('specialChars')
+              } else if (!specialChars) {
+                setSpecialChars(e.target.checked)
+                charArr.push('specialChars')
               }
-            }}
-          />
-          Special characters
+            }} />
+            Special Characters
         </label>
+        <button onClick={ () => clearOptions() }>
+          Clear Options
+        </button>
       </div>
       <button>
         Create New Password
