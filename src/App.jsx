@@ -1,9 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 function App() {
   const [password, setPassword] = useState('');
-  const [length, setLength] = useState(null);
+  const [length, setLength] = useState(4);
   const [uppercase, setUppercase] = useState(false);
   const [lowercase, setLowercase] = useState(false);
   const [numbers, setNumbers] = useState(false);
@@ -14,30 +15,93 @@ function App() {
   const [charArr, setCharArr] = useState([]);
 
 
-  const generatePassword = () => {
+  const generatePassword = (pwLength) => {
     //create a variable to store the password
-    let generatedPassword = '';
-
-    let selectedValsArr = [uppercase, lowercase, numbers, specialChars];
-
-    //create for loop to iterate through the selectedValsArr array
-    for (let i = 0; i < selectedValsArr.length; i++) {
-      if (selectedValsArr[i] === true) {
-        let switchVal = selectedValsArr[i];
-        switch (switchVal) {
-          case uppercase:
+    let tempPassword = '';
+    let finalPassword = '';
+    const generateRandomNumber = (bottomNum, topNum) => {
+      return Math.floor(Math.random() * ((topNum - bottomNum) + 1)) + bottomNum;
+    }
+    //This function ensures that the password contains at least one of each character type selected.
+    const initializePasswordChars = () => {
+      for (let i = 0; i < charArr.length; i++) {
+        switch (charArr[i]) {
+          case 'uppercase':
+            tempPassword += String.fromCharCode(generateRandomNumber(65, 90));
             break;
-          case lowercase:
+          case 'lowercase':
+            tempPassword += String.fromCharCode(generateRandomNumber(97, 122));
             break;
-          case numbers:
+          case 'numbers':
+            tempPassword += String.fromCharCode(generateRandomNumber(48, 57));
             break;
-          case specialChars:
+          case 'specialChars':
+            let randomSpecialChars = ''
+            randomSpecialChars += String.fromCharCode(generateRandomNumber(33, 47));
+            randomSpecialChars += String.fromCharCode(generateRandomNumber(58, 64));
+            randomSpecialChars += String.fromCharCode(generateRandomNumber(91, 96));
+            randomSpecialChars += String.fromCharCode(generateRandomNumber(123, 126));
+            let randomSpecialCharsIndex = generateRandomNumber(0, randomSpecialChars.length - 1);
+            randomSpecialChars = randomSpecialChars[randomSpecialCharsIndex];
+            tempPassword += randomSpecialChars;
             break;
           default:
             break;
         }
       }
     }
+    const randomPasswordChars = () => {
+      const RandomCharIndex = generateRandomNumber(0, charArr.length - 1);
+      switch (charArr[RandomCharIndex]) {
+        case 'uppercase':
+          tempPassword += String.fromCharCode(generateRandomNumber(65, 90));
+          break;
+        case 'lowercase':
+          tempPassword += String.fromCharCode(generateRandomNumber(97, 122));
+          break;
+        case 'numbers':
+          tempPassword += String.fromCharCode(generateRandomNumber(48, 57));
+          break;
+        case 'specialChars':
+          let randomSpecialChars = ''
+          randomSpecialChars += String.fromCharCode(generateRandomNumber(33, 47));
+          randomSpecialChars += String.fromCharCode(generateRandomNumber(58, 64));
+          randomSpecialChars += String.fromCharCode(generateRandomNumber(91, 96));
+          randomSpecialChars += String.fromCharCode(generateRandomNumber(123, 126));
+          let randomSpecialCharsIndex = generateRandomNumber(0, randomSpecialChars.length - 1);
+          randomSpecialChars = randomSpecialChars[randomSpecialCharsIndex];
+          tempPassword += randomSpecialChars;
+          break;
+        default:
+          break;
+      }
+    }
+    const scramblePassword = () => {
+      const copiedTempPassword = tempPassword.slice(0 , tempPassword.length);
+      for (let i = tempPassword.length; i > 0 ; i--) {
+        let randomIndex = generateRandomNumber(0, i - 1);
+        finalPassword += tempPassword[randomIndex];
+        tempPassword = tempPassword.slice(0, randomIndex) + tempPassword.slice(randomIndex + 1);
+      }
+      setPassword(finalPassword);
+
+    }
+    const generateFinalPassword = () => {
+      if (tempPassword.length === 0) {
+        initializePasswordChars();
+        generateFinalPassword();
+      } else if (tempPassword.length > 0 && pwLength != tempPassword.length) {
+        randomPasswordChars();
+        generateFinalPassword();
+      } if (pwLength == tempPassword.length) {
+        scramblePassword();
+      }
+    }
+
+    if (charArr.length > 0) {
+      generateFinalPassword();
+    }
+    //END OF FUNCTION
   }
 
   const findAndRemove = (option) => {
@@ -53,14 +117,16 @@ function App() {
     setCharArr([]);
   }
 
-  useEffect(()=> {
-    let aciiVal = 54;
-    let char = String.fromCharCode(aciiVal);
-    console.log("This is a character: " + char);
+  const copyToClipboard = (text) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
 
-    let aciiVal2 = 'A';
-    let char2 = aciiVal2.charCodeAt(0);
-    console.log("This is a acii number: " + char2);
+  useEffect(()=> {
 
   }, [])
 
@@ -70,7 +136,10 @@ function App() {
       <div className="best-practices">
         Best practices for passwords are as follows:
       </div>
-      <input className="passwordInput" type="text" value={password} />
+      <div className="password-container">
+        <input className="passwordInput" type="text" value={password} />
+        <a onClick={() => copyToClipboard(password) } className="copy-btn" ><i className="bi-copy"></i></a>
+      </div>
       <span>Select the following options for creating your password:</span>
       <div className="pw-options">
         <label>
@@ -211,7 +280,7 @@ function App() {
           Clear Options
         </button>
       </div>
-      <button>
+      <button onClick={ () => generatePassword(length) }>
         Create New Password
       </button>
     </div>

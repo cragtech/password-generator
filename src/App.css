@@ -7,12 +7,43 @@
   justify-content: center;
   align-items: center
 }
+.password-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  margin: 20px;
+}
+.copy-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  border-radius: 5px;
+  /* border: 2px solid black; */
+  cursor: pointer;
+}
+.copy-btn:hover {
+  /* border: 2px solid red; */
+  color: red;
+}
+.bi-copy {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content:start;
+  align-items: top;
+  font-size: 1rem;
+  padding: 2px;
+
+}
 .passwordInput {
-  margin-bottom: 20px;
   width: 500px;
   border: 2px solid black;
   border-radius: 5px;
-  padding: 10px;
+  height: 100%;
+  font-size: 1rem;
 }
 .pw-options {
   margin: 20px;
