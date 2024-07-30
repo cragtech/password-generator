@@ -7,6 +7,11 @@
   justify-content: center;
   align-items: center
 }
+.best-practices-list {
+  list-style-type: number;
+  margin-left: 0;
+  text-align: left;
+}
 .password-container {
   display: flex;
   flex-direction: row;
@@ -36,7 +41,19 @@
   align-items: top;
   font-size: 1rem;
   padding: 2px;
-
+}
+.tooltip {
+  position: absolute;
+  bottom: 100%; /* Position above the image */
+  left: 50%;
+  transform: translateX(-50%); /* Center the tooltip */
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  opacity: 1;
+  visibility: visible;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 .passwordInput {
   width: 500px;

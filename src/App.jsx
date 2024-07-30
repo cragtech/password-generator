@@ -13,6 +13,7 @@ function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [placeholder, setPlaceholder] = useState('Max Length: 64');
   const [charArr, setCharArr] = useState([]);
+  const [visible, setVisible] = useState(false);
 
 
   const generatePassword = (pwLength) => {
@@ -125,6 +126,16 @@ function App() {
       document.execCommand('copy');
       document.body.removeChild(textarea);
     }
+    const showTooltip = () => {
+      setVisible(true);
+      setTimeout(() => {
+        setVisible(false);
+      }, 2000); // Hide the tooltip after 2 seconds
+    };
+  const handleCopyClick = () => {
+    copyToClipboard(password);
+    showTooltip();
+  };
 
   useEffect(()=> {
 
@@ -134,11 +145,16 @@ function App() {
     <div className="App">
       <h1>Password Generator</h1>
       <div className="best-practices">
-        Best practices for passwords are as follows:
+        <p>Quick tips for best practices for passwords:</p>
+        <ul className="best-practices-list">
+          <li><strong>Length:</strong> Aim for passwords that are at least 8-12 characters long. The longer, the better, as it makes them harder to crack.</li>
+          <li><strong>Complexity:</strong> Combine uppercase & lowercase letters, numbers, and special characters. The more complex the higher level of security.</li>
+          <li><strong>Avoid Common Words:</strong> Steer clear of dictionary words, common phrases, or predictable patterns like "password123" or "qwerty."</li>
+        </ul>
       </div>
       <div className="password-container">
         <input className="passwordInput" type="text" value={password} />
-        <a onClick={() => copyToClipboard(password) } className="copy-btn" ><i className="bi-copy"></i></a>
+        <a onClick={handleCopyClick} className="copy-btn"><i className="bi-copy"></i>{visible && <div className="copiedTooltip">Copied</div>}</a>
       </div>
       <span>Select the following options for creating your password:</span>
       <div className="pw-options">
