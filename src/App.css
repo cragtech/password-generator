@@ -8,7 +8,6 @@
   align-items: center
 }
 .best-practices-list {
-  list-style-type: number;
   margin-left: 0;
   text-align: left;
 }
@@ -26,11 +25,11 @@
   align-items: center;
   height: 100%;
   border-radius: 5px;
-  /* border: 2px solid black; */
   cursor: pointer;
+  text-decoration: none; /* Removes underline */
+
 }
 .copy-btn:hover {
-  /* border: 2px solid red; */
   color: red;
 }
 .bi-copy {
